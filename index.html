@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="us">
+<head>
+	<meta charset="utf-8">
+	<title>Words</title>
+	<link href="css/jquery-ui.min.css" rel="stylesheet">
+	<link href="css/jquery-ui.structure.min.css" rel="stylesheet">
+	<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+	<style media="screen">
+		.pos-help, #help{
+			display: none;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+
+			// Gera numeros aleatorios com limite na quantidade de caracteres digitados.
+			const getRandom = (min, max) => Math.round(Math.random() * (max - min) + min);
+
+			// Evento de click para iniciar o game
+			$('#start').click(function(){
+				const word = $('#word').val();
+				createGame(word);
+			});
+
+			// Evento de click para ajuda na palavra
+			$('#help').click(function(){
+				$('.pos-help').toggle();
+			});
+
+			// Embaralha a palavra e cria inputs para que sejam sortable
+			function createGame(word){
+				if(!word){
+					return;
+				}
+				let randomList = [];
+				let pos = 0;
+
+				while(randomList.length < word.length){
+					let add = true;
+					const random = getRandom(0, (word.length -1));
+					randomList.forEach(number => {
+						if(number == random){
+							add = false;
+							return;
+						}
+					});
+					if(add){
+						randomList.push(random);
+
+						const element = `<li id="part-${pos}" answer="${word[random]}"><span class="pos-help">Posicão correta: ${random+1} </span> ${word[random]}</li>`;
+						$('#sortable').append(element);
+						pos++;
+					}
+				}
+				$('#help').show();
+				$( "#sortable" ).sortable({
+					out: function(event, ui){
+						checkNext();
+					}
+				});
+    		$( "#sortable" ).disableSelection();
+			}
+
+			// Verifica se a resposta esta correta
+			function check(){
+				const word = $('#word').val();
+				const list = $('#sortable li');
+				let answer = '';
+				list.each(function()  {
+					answer += $(this).attr('answer');
+				});
+				return word == answer;
+			}
+
+			// Faz algo caso a resposta esteja certa.
+			function checkNext(){
+				if(check()){
+					$( "#progressbar" ).progressbar({
+			      value: 50
+			    });
+					$( "#dialog" ).dialog( "open" );
+				}
+			}
+
+			$( "#dialog" ).dialog({
+		       autoOpen: false,
+		       show: {
+		         effect: "blind",
+		         duration: 1000
+		       },
+		       hide: {
+		         effect: "explode",
+		         duration: 1000
+		       }
+		     });
+
+				 // DESENHAR E COLORIR
+
+				 // CONVERTE IMG to CANVAS
+				 function convertImageToCanvas(image) {
+					var canvas = document.createElement("canvas");
+					canvas.width = image.width;
+					canvas.height = image.height;
+					canvas.getContext("2d").drawImage(image, 0, 0);
+					return canvas;
+					}
+
+					function addCanvas(){}
+
+
+		});
+	</script>
+</head>
+<body>
+	<input type="text" id="word">
+	<button id="start">Começar</button>
+	<button id="help">Ajuda</button>
+	<div id="progressbar"></div>
+	<div id="dialog" title="Parabens">
+  	<p>Parabéns, você acertou!!!</p>
+	</div>
+	<section id="game">
+		<ul id="sortable">
+
+		</ul>
+		<div id="colorfull">
+
+		</div>
+	</section>
+</body>
+</html>
