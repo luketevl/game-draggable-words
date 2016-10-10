@@ -1,2 +1,5 @@
-# game-draggable-words
-Draggable words for kids learn
+# game-sortable-words
+Sortable words for kids learn
+
+#Todo
+- Instructions
