@@ -6,13 +6,24 @@
 	<link href="css/jquery-ui.min.css" rel="stylesheet">
 	<link href="css/jquery-ui.structure.min.css" rel="stylesheet">
 	<link href="css/jquery-ui.theme.min.css" rel="stylesheet">
+	<link href="css/wColorPicker.min.css" rel="stylesheet" />
+	<link href="css/wPaint.min.css" rel="stylesheet" />
 	<style media="screen">
-		.pos-help, #help{
+		.pos-help, #help, #colorfull{
 			display: none;
 		}
 	</style>
 	<script type="text/javascript" src="js/jquery.js"></script>
 	<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="js/wColorPicker.min.js"></script>
+	<script type="text/javascript" src="js/wPaint.min.js"></script>
+
+	<!-- wPaint -->
+	<script type="text/javascript" src="plugins/main/wPaint.menu.main.min.js"></script>
+	<script type="text/javascript" src="plugins/text/wPaint.menu.text.min.js"></script>
+	<script type="text/javascript" src="plugins/shapes/wPaint.menu.main.shapes.min.js"></script>
+	<script type="text/javascript" src="plugins/file/wPaint.menu.main.file.min.js"></script>
+
 	<script type="text/javascript">
 		$(document).ready(function(){
 
@@ -82,6 +93,13 @@
 			      value: 50
 			    });
 					$( "#dialog" ).dialog( "open" );
+					$('#wPaint').wPaint({
+						menuOffsetLeft: -35,
+						menuOffsetTop: -50,
+						loadImgBg: loadImgBg,
+						loadImgFg: loadImgFg
+					});
+						$('#colorfull').show();
 				}
 			}
 
@@ -109,9 +127,22 @@
 					}
 
 					function addCanvas(){}
+					var images = [
+						'img/1.jpg',
+						'img/2.jpg',
+					];
 
 
-		});
+					function loadImgBg () {
+						this._showFileModal('bg', images);
+					}
+
+					function loadImgFg () {
+						this._showFileModal('fg', images);
+					}
+
+
+			});
 	</script>
 </head>
 <body>
@@ -127,8 +158,14 @@
 
 		</ul>
 		<div id="colorfull">
+			<div id="wPaint" style="position:relative; width:500px; height:200px; background-color:#7a7a7a; margin:70px auto 20px auto;"></div>
 
-		</div>
+			      <center style="margin-bottom: 50px;">
+			        <input type="button" value="Trocar barra" onclick="$('#wPaint').wPaint('menuOrientation', $('#wPaint').wPaint('menuOrientation') === 'vertical' ? 'horizontal' : 'vertical');"/>
+			      </center>
+
+			      <center id="wPaint-img"></center>
+			    </div>
 	</section>
 </body>
 </html>
